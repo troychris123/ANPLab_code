@@ -1,0 +1,13 @@
+clear all 
+cd /Volumes/Shares/NCCIH/LYA/LYA_Lab/PainRev_Behavioral/PainRev_Behavior/ %location of eyedata text file
+load EXPT.mat %experimental data structure
+study_root = '/Volumes/Shares/NCCIH/LYA/LYA_Lab/PainRev_Behavioral/PainRev_Eye'
+cd(study_root) 
+%% import eye data into matlab 
+has_issues = [];
+for i = 13:16;
+    thissubj = cell2mat(EXPT.subjects(i)) %identify subject number from exp. data structure
+    filename = [num2str(thissubj) '_fulltrial_SAMPLE.txt'] %apply the subjnum to the beginning of filename (should be a direct match to filename in folder!)
+    [events, info] = ParseEyeLinkSamples_blocks_ANPmessages(filename); %utilizes the ParseEyeLinkSamples function (annotated from *David Jangraw script to import edf files)
+    save([num2str(thissubj) '_parsed_eyedata_samples_fMRI.mat'], 'events', 'info', 'filename') %save the imported eyedata into a mat file
+end
